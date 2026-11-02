@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Input;
+using UnityEngine;
 
 namespace Item.Tools
 {
@@ -9,9 +10,9 @@ namespace Item.Tools
         public ToolType toolType;
         public Transform handSocketTransform;
 
-        public override void Interact(GameObject player)
+        public override void Interact(XRPlayerInteract player)
         {
-            // go.EquipTool(this);
+            player.EquipTool(this);
         }
     }
 }

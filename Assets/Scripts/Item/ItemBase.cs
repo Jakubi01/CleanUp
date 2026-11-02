@@ -1,4 +1,5 @@
-﻿using Interface;
+﻿using Input;
+using Interface;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -15,7 +16,7 @@ namespace Item
             return $"[{itemName}] {description}";
         }
 
-        public virtual void Interact(GameObject player)
+        public virtual void Interact(XRPlayerInteract player)
         {
             
         }

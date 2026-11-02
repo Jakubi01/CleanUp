@@ -51,8 +51,7 @@ namespace Input
             // HMD가 거의 수직 방향을 바라볼 때의 예외 처리
             if (forward.sqrMagnitude < 0.001f)
             {
-                forward = Vector3.ProjectOnPlane(
-                    transform.forward, Vector3.up).normalized;
+                forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
             }
 
             var moveDirection = forward * input.y + right * input.x;

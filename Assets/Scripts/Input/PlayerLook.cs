@@ -53,30 +53,18 @@ namespace Input
             if (playerInput.LookIsMouseDelta)
             {
                 // 마우스 델타는 프레임 동안의 이동량이다.
-                transform.Rotate(
-                    Vector3.up,
-                    lookInput.x * mouseSensitivity,
-                    Space.World);
-
+                transform.Rotate(Vector3.up, lookInput.x * mouseSensitivity, Space.World);
                 _pitch -= lookInput.y * mouseSensitivity;
             }
             else
             {
                 // 스틱 입력은 시간에 비례해 회전시킨다.
-                transform.Rotate(
-                    Vector3.up,
-                    lookInput.x * stickSensitivity * Time.deltaTime,
-                    Space.World);
-
-                _pitch -= lookInput.y * stickSensitivity *
-                          Time.deltaTime;
+                transform.Rotate(Vector3.up, lookInput.x * stickSensitivity * Time.deltaTime, Space.World);
+                _pitch -= lookInput.y * stickSensitivity * Time.deltaTime;
             }
 
             _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
-
-            hmd.localRotation =
-                _initialHmdLocalRotation *
-                Quaternion.Euler(_pitch, 0f, 0f);
+            hmd.localRotation = _initialHmdLocalRotation * Quaternion.Euler(_pitch, 0f, 0f);
         }
     }
 }
