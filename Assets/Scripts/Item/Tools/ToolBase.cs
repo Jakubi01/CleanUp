@@ -9,10 +9,5 @@ namespace Item.Tools
     {
         public ToolType toolType;
         public Transform handSocketTransform;
-
-        public override void Interact(XRPlayerInteract player)
-        {
-            player.EquipTool(this);
-        }
     }
 }

@@ -1,33 +1,40 @@
-﻿using System;
-using Item;
-using Item.Garbage;
-using Item.Tools;
+﻿using Item;
 using UnityEngine;
 
 namespace Input
 {
     /**
-     * RightHand -> Garbage
-     * LeftHand  -> Tool
+     * RightHand -> Item Get
+     * if input => action input => held item action
      */
     
     public class XRPlayerInteract : MonoBehaviour
     {
         [SerializeField] private Transform rightHandSocket;
-        [SerializeField] private Transform leftHandSocket;
         [SerializeField] private Transform eyeTransform;
         [SerializeField] private LayerMask itemLayerMask;
 
+        private XRPlayerInput _input;
+        
         private ItemBase _currentWatchingItem;
         private ItemBase _lastWatchingItem;
+        private ItemBase _currentHeldItem;
         
-        private GarbageBase _currentHeldGarbage;
-        private ToolBase _currentHeldTool;
-        
-        private bool _hasRightHand;
-        private bool _hasLeftHand;
+        private bool _hasItem;
 
+        private void Awake()
+        {
+            _input = GetComponent<XRPlayerInput>();
+        }
+        
         private void Update()
+        {
+            FocusInteractable();
+            TryInteract();
+            TryDropItem();
+        }
+
+        private void FocusInteractable()
         {
             if (!eyeTransform) return;
             
@@ -55,6 +62,16 @@ namespace Input
             }
         }
 
+        private void TryInteract()
+        {
+            if (!_input || !_currentWatchingItem) return;
+            
+            var interactPressed = _input.ConsumeInteract();
+            if (!interactPressed) return;
+
+            _currentWatchingItem.Interact(this);
+        }
+
         private void ClearCurrentItem()
         {
             if (!_lastWatchingItem) return;
@@ -64,32 +81,53 @@ namespace Input
             _currentWatchingItem = null;
         }
 
-        public void EquipTool(ToolBase toolBase)
+        public bool CanCollect(ItemBase itemBase)
         {
-            if (!toolBase || _hasLeftHand) return;
-            
-            toolBase.gameObject.transform.SetParent(leftHandSocket);
-            toolBase.gameObject.transform.localPosition = Vector3.zero;
-            toolBase.gameObject.transform.localRotation = Quaternion.identity;
-            _currentHeldTool = toolBase;
-            _hasLeftHand = true;
+            if(!itemBase) return false;
+            return !_hasItem;
         }
 
-        public bool CanCollect(GarbageBase garbageBase)
+        public void CollectItem(ItemBase itemBase)
         {
-            if(!garbageBase) return false;
-            return !_hasRightHand;
+            if (_hasItem || !itemBase) return;
+            
+            itemBase.gameObject.transform.SetParent(rightHandSocket);
+            itemBase.gameObject.transform.localPosition = Vector3.zero;
+            itemBase.gameObject.transform.localRotation = Quaternion.identity;
+            
+            if (itemBase.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
+            if (itemBase.TryGetComponent<Collider>(out var col)) col.enabled = false;
+            
+            _currentHeldItem = itemBase;
+            _hasItem = true;
         }
 
-        public void CollectGarbage(GarbageBase garbageBase)
+        private void TryDropItem()
         {
-            if (_hasRightHand || !garbageBase) return;
+            if (!_input) return;
+
+            var pressed = _input.ConsumeDrop();
+            if (!pressed) return;
+
+            DropItem();
+        }
+        
+        private void DropItem()
+        {
+            if (!_hasItem || !_currentHeldItem) return;
             
-            garbageBase.gameObject.transform.SetParent(rightHandSocket);
-            garbageBase.gameObject.transform.localPosition = Vector3.zero;
-            garbageBase.gameObject.transform.localRotation = Quaternion.identity;
-            _currentHeldGarbage = garbageBase;
-            _hasRightHand = true;
+            _currentHeldItem.gameObject.transform.SetParent(null);
+
+            if (_currentHeldItem.TryGetComponent<Rigidbody>(out var rb))
+            {
+                rb.isKinematic = false;
+                rb.AddForce(eyeTransform.forward * 2f, ForceMode.Impulse);
+            }
+
+            if (_currentHeldItem.TryGetComponent<Collider>(out var col)) col.enabled = true;
+
+            _currentHeldItem = null;
+            _hasItem = false;
         }
     }
 }

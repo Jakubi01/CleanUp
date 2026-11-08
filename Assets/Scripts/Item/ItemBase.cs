@@ -2,7 +2,6 @@
 using Input;
 using Interface;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UserInterface;
 
 namespace Item
@@ -31,7 +30,9 @@ namespace Item
 
         public virtual void Interact(XRPlayerInteract player)
         {
+            if (!player.CanCollect(this)) return;
             
+            player.CollectItem(this);
         }
 
         public void ShowDescription()

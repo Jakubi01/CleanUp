@@ -9,6 +9,7 @@ namespace Input
         [SerializeField] private InputActionReference moveAction;
         [SerializeField] private InputActionReference lookAction;
         [SerializeField] private InputActionReference interactAction;
+        [SerializeField] private InputActionReference dropAction;
         [SerializeField] private InputActionReference crouchAction;
         [SerializeField] private InputActionReference jumpAction;
         [SerializeField] private InputActionReference sprintAction;
@@ -23,6 +24,7 @@ namespace Input
         public bool LookIsMouseDelta { get; private set; }
 
         private bool _interactPressed;
+        private bool _dropPressed;
         private bool _jumpPressed;
         private bool _actionPressed;
 
@@ -31,6 +33,7 @@ namespace Input
             Bind(moveAction, OnMove);
             Bind(lookAction, OnLook);
             Bind(interactAction, OnInteract);
+            Bind(dropAction, OnDrop);
             Bind(crouchAction, OnCrouch);
             Bind(jumpAction, OnJump);
             Bind(sprintAction, OnSprint);
@@ -42,6 +45,7 @@ namespace Input
             Unbind(moveAction, OnMove);
             Unbind(lookAction, OnLook);
             Unbind(interactAction, OnInteract);
+            Unbind(dropAction, OnDrop);
             Unbind(crouchAction, OnCrouch);
             Unbind(jumpAction, OnJump);
             Unbind(sprintAction, OnSprint);
@@ -54,6 +58,7 @@ namespace Input
             IsSprinting = false;
 
             _interactPressed = false;
+            _dropPressed = false;
             _jumpPressed = false;
             _actionPressed = false;
         }
@@ -115,6 +120,12 @@ namespace Input
                 _interactPressed = true;
         }
 
+        public void OnDrop(InputAction.CallbackContext ctx)
+        {
+            if (ctx.performed)
+                _dropPressed = true;
+        }
+
         public void OnCrouch(InputAction.CallbackContext ctx)
         {
             IsCrouching = !ctx.canceled && ctx.ReadValueAsButton();
@@ -141,6 +152,13 @@ namespace Input
         {
             var pressed = _interactPressed;
             _interactPressed = false;
+            return pressed;
+        }
+
+        public bool ConsumeDrop()
+        {
+            var pressed = _dropPressed;
+            _dropPressed = false;
             return pressed;
         }
 
