@@ -1,7 +1,9 @@
-﻿using Input;
+﻿using System;
+using Input;
 using Interface;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UserInterface;
 
 namespace Item
 {
@@ -10,7 +12,18 @@ namespace Item
         [Header("Item Info")]
         public string itemName;
         public string description;
+        
+        [Header("Item Description UI")]
+        [SerializeField] private ItemDescriptor itemDescriptor;
 
+        private void Awake()
+        {
+            if (itemDescriptor)
+            {
+                itemDescriptor.Init(GetDescription());
+            }
+        }
+        
         public string GetDescription()
         {
             return $"[{itemName}] {description}";
@@ -19,6 +32,20 @@ namespace Item
         public virtual void Interact(XRPlayerInteract player)
         {
             
+        }
+
+        public void ShowDescription()
+        {
+            if (!itemDescriptor) return;
+            
+            itemDescriptor.Show();
+        }
+
+        public void HideDescription()
+        {
+            if (!itemDescriptor) return;
+            
+            itemDescriptor.Hide();
         }
     }
 }

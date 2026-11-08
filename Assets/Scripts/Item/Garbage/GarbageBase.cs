@@ -15,7 +15,6 @@ namespace Item.Garbage
             if (!player.CanCollect(this)) return;
             
             player.CollectGarbage(this);
-            Destroy(gameObject);
         }
     }
 }

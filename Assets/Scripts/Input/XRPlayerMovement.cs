@@ -110,7 +110,7 @@ namespace Input
 
         private void HandleCrouch()
         {
-            bool shouldCrouch = playerInput.IsCrouching;
+            var shouldCrouch = playerInput.IsCrouching;
 
             if (!shouldCrouch && IsCeilingAbove())
             {
@@ -119,26 +119,23 @@ namespace Input
 
             _currentHeightTarget = shouldCrouch ? crouchHeight : standingHeight;
             _characterController.height = Mathf.Lerp(_characterController.height, _currentHeightTarget, Time.deltaTime * timeToCrouch);
-
             _characterController.center = new Vector3(0f, _characterController.height / 2f, 0f);
 
-            if (cameraRig)
-            {
-                float targetOffset = shouldCrouch ? (crouchHeight - standingHeight) * 0.5f : 0f;
-                _virtualCrouchYOffset = Mathf.Lerp(_virtualCrouchYOffset, targetOffset, Time.deltaTime * timeToCrouch);
+            if (!cameraRig) return;
+            var targetOffset = shouldCrouch ? (crouchHeight - standingHeight) * 0.5f : 0f;
+            _virtualCrouchYOffset = Mathf.Lerp(_virtualCrouchYOffset, targetOffset, Time.deltaTime * timeToCrouch);
 
-                Vector3 rigPos = _cameraRigInitialLocalPosition;
-                rigPos.y += _virtualCrouchYOffset;
+            var rigPos = _cameraRigInitialLocalPosition;
+            rigPos.y += _virtualCrouchYOffset;
 
-                cameraRig.localPosition = rigPos;
-            }
+            cameraRig.localPosition = rigPos;
         }
 
         private bool IsCeilingAbove()
         {
-            Vector3 origin = transform.position + Vector3.up * _characterController.height;
-            float radius = _characterController.radius - 0.05f;
-            float distance = standingHeight - _characterController.height;
+            var origin = transform.position + Vector3.up * _characterController.height;
+            var radius = _characterController.radius - 0.05f;
+            var distance = standingHeight - _characterController.height;
 
             if (distance <= 0.01f) return false;
 
