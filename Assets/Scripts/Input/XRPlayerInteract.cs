@@ -15,6 +15,7 @@ namespace Input
         [SerializeField] private LayerMask itemLayerMask;
 
         private XRPlayerInput _input;
+        private XRPlayerAction _action;
         
         private ItemBase _currentWatchingItem;
         private ItemBase _lastWatchingItem;
@@ -25,6 +26,7 @@ namespace Input
         private void Awake()
         {
             _input = GetComponent<XRPlayerInput>();
+            _action = GetComponent<XRPlayerAction>();
         }
         
         private void Update()
@@ -100,6 +102,7 @@ namespace Input
             
             _currentHeldItem = itemBase;
             _hasItem = true;
+            _action.SetItem(itemBase);
         }
 
         private void TryDropItem()
