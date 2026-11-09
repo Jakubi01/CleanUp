@@ -1,4 +1,4 @@
-﻿using Item;
+﻿using Interface;
 using UnityEngine;
 
 namespace Input
@@ -6,8 +6,7 @@ namespace Input
     public class XRPlayerAction : MonoBehaviour
     {
         private XRPlayerInput _input;
-            
-        private ItemBase _currentHeldItem;
+        private IInteractable _interactable;
 
         private void Awake()
         {
@@ -21,19 +20,19 @@ namespace Input
 
         private void TryItemAction()
         {
-            if (!_input || !_currentHeldItem) return;
+            if (!_input || _interactable == null) return;
 
             var pressed = _input.ConsumeAction();
             if (!pressed) return;
 
-            _currentHeldItem.Action();
+            _interactable.Action();
         }
         
-        public void SetItem(ItemBase itemBase)
+        public void SetItem(IInteractable interactable)
         {
-            if (!itemBase) return;
+            if (interactable == null) return;
             
-            _currentHeldItem = itemBase;
+            _interactable = interactable;
         }
     }
 }

@@ -53,6 +53,8 @@ namespace Input
             }
 
             if (_lastWatchingItem == itemBase) return;
+            
+            _input?.ConsumeInteract();
 
             ClearCurrentItem();
             _currentWatchingItem = itemBase;
@@ -101,6 +103,7 @@ namespace Input
             if (itemBase.TryGetComponent<Collider>(out var col)) col.enabled = false;
             
             _currentHeldItem = itemBase;
+            _currentHeldItem.IsHeld = true;
             _hasItem = true;
             _action.SetItem(itemBase);
         }
@@ -129,6 +132,7 @@ namespace Input
 
             if (_currentHeldItem.TryGetComponent<Collider>(out var col)) col.enabled = true;
 
+            _currentHeldItem.IsHeld = false;
             _currentHeldItem = null;
             _hasItem = false;
         }
