@@ -156,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item.Garbage.GarbageBase
   itemName: Cube
   description: Yellow cube desu
-  itemDescriptor: {fileID: 4248364963736200114}
+  itemDescriptor: {fileID: 2847055636878502247}
   data: {fileID: 0}
   requiredToolType: 0
   scoreValue: 10
@@ -257,9 +257,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
---- !u!114 &4248364963736200114 stripped
+--- !u!114 &2847055636878502247 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7495289917814399839, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8463214912271313290, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
   m_PrefabInstance: {fileID: 5976741915244282093}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

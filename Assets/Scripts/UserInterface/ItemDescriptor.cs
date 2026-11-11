@@ -15,9 +15,10 @@ namespace UserInterface
         
         public void Init(string description)
         {
-            if (descriptionText)
+            if (descriptionText != null)
             {
                 descriptionText.text = description;
+                Debug.Log("Init");
             }
         }
         

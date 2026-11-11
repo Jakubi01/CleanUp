@@ -7,5 +7,7 @@ namespace Interface
         string GetDescription();
         void Interact(XRPlayerInteract player);
         void Action();
+        void ShowDescription();
+        void HideDescription();
     }
 }

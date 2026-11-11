@@ -9,8 +9,9 @@ namespace Item.Garbage
         public ToolType requiredToolType = ToolType.None;
         public int scoreValue = 10;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             OnAction += () => Debug.Log("GarbageBase::OnAction");
         }
     }

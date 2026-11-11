@@ -1,4 +1,5 @@
-﻿using Item;
+﻿using Interface;
+using Item;
 using UnityEngine;
 
 namespace Input
@@ -17,11 +18,12 @@ namespace Input
         private XRPlayerInput _input;
         private XRPlayerAction _action;
         
-        private ItemBase _currentWatchingItem;
-        private ItemBase _lastWatchingItem;
-        private ItemBase _currentHeldItem;
-        
+        private IInteractable  _currentWatchingItem;
+        private IInteractable  _lastWatchingItem;
+
         private bool _hasItem;
+
+        public ItemBase CurrentInteractable { get; private set; }
 
         private void Awake()
         {
@@ -39,37 +41,34 @@ namespace Input
         private void FocusInteractable()
         {
             if (!eyeTransform) return;
-            
+    
             if (!Physics.Raycast(eyeTransform.position, eyeTransform.forward, out var hit, 5f, itemLayerMask))
             {
                 ClearCurrentItem();
                 return;
             }
 
-            if (!hit.collider.gameObject.TryGetComponent<ItemBase>(out var itemBase))
+            if (!hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 ClearCurrentItem();
                 return;
             }
 
-            if (_lastWatchingItem == itemBase) return;
-            
+            if (_lastWatchingItem == interactable) return;
+    
             _input?.ConsumeInteract();
 
             ClearCurrentItem();
-            _currentWatchingItem = itemBase;
-            _lastWatchingItem = itemBase;
+            _currentWatchingItem = interactable;
+            _lastWatchingItem = interactable;
 
-            if (_currentWatchingItem)
-            {
-                _currentWatchingItem.ShowDescription();
-            }
+            _currentWatchingItem.ShowDescription();
         }
 
         private void TryInteract()
         {
-            if (!_input || !_currentWatchingItem) return;
-            
+            if (!_input || _currentWatchingItem == null) return;
+    
             var interactPressed = _input.ConsumeInteract();
             if (!interactPressed) return;
 
@@ -78,9 +77,16 @@ namespace Input
 
         private void ClearCurrentItem()
         {
-            if (!_lastWatchingItem) return;
-            
-            _lastWatchingItem.HideDescription(); 
+            switch (_lastWatchingItem)
+            {
+                case null:
+                    return;
+                case Object obj when obj:
+                case not null:
+                    _lastWatchingItem.HideDescription();
+                    break;
+            }
+
             _lastWatchingItem = null;
             _currentWatchingItem = null;
         }
@@ -102,8 +108,8 @@ namespace Input
             if (itemBase.TryGetComponent<Rigidbody>(out var rb)) rb.isKinematic = true;
             if (itemBase.TryGetComponent<Collider>(out var col)) col.enabled = false;
             
-            _currentHeldItem = itemBase;
-            _currentHeldItem.IsHeld = true;
+            CurrentInteractable = itemBase;
+            CurrentInteractable.IsHeld = true;
             _hasItem = true;
             _action.SetItem(itemBase);
         }
@@ -120,20 +126,20 @@ namespace Input
         
         private void DropItem()
         {
-            if (!_hasItem || !_currentHeldItem) return;
+            if (!_hasItem || !CurrentInteractable) return;
             
-            _currentHeldItem.gameObject.transform.SetParent(null);
+            CurrentInteractable.gameObject.transform.SetParent(null);
 
-            if (_currentHeldItem.TryGetComponent<Rigidbody>(out var rb))
+            if (CurrentInteractable.TryGetComponent<Rigidbody>(out var rb))
             {
                 rb.isKinematic = false;
                 rb.AddForce(eyeTransform.forward * 2f, ForceMode.Impulse);
             }
 
-            if (_currentHeldItem.TryGetComponent<Collider>(out var col)) col.enabled = true;
+            if (CurrentInteractable.TryGetComponent<Collider>(out var col)) col.enabled = true;
 
-            _currentHeldItem.IsHeld = false;
-            _currentHeldItem = null;
+            CurrentInteractable.IsHeld = false;
+            CurrentInteractable = null;
             _hasItem = false;
         }
     }
