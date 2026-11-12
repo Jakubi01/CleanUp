@@ -18,7 +18,6 @@ namespace UserInterface
             if (descriptionText != null)
             {
                 descriptionText.text = description;
-                Debug.Log("Init");
             }
         }
         

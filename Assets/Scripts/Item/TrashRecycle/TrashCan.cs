@@ -13,15 +13,20 @@ namespace Item.TrashRecycle
         [Header("TrashCan Settings")] 
         [SerializeField] private ItemDescriptor descriptor;
         [SerializeField] private string trashCanName;
-        public GarbageType garbageType;
+        [SerializeField] private GarbageType garbageType;
 
-        private GarbageBase _garbage;
+        private GameManager _gameManager;
 
         private void Awake()
         {
             if (descriptor)
             {
                 descriptor.Init(GetDescription());
+            }
+
+            if (GameManager.Instance)
+            {
+                _gameManager = GameManager.Instance;
             }
         }
         
@@ -32,17 +37,32 @@ namespace Item.TrashRecycle
 
         public void Interact(XRPlayerInteract player)
         {
-            if (!player || !player.CurrentInteractable.TryGetComponent(out GarbageBase garbage)) return;
-
-            _garbage = garbage;
+            if (!player || !player.CurrentInteractable ||
+                !player.CurrentInteractable.TryGetComponent(out GarbageBase garbage)) return;
+            
+            CompareType(garbage);
         }
 
-        public void Action()
+        private void CompareType(GarbageBase garbage)
         {
-            if (!_garbage) return;
+            if (!garbage) return;
 
-            _garbage.Action();
-            GameManager.Instance.AddGameScore(_garbage.scoreValue);
+            var typeMatch = garbageType == garbage.type;
+
+            if (!_gameManager)
+                _gameManager = GameManager.Instance;
+            
+            if (typeMatch)
+            {
+                _gameManager.AddGameScore(garbage.scoreValue);
+            }
+            else
+            {
+                _gameManager.RemoveGameScore(garbage.scoreValue);
+            }
+            
+            _gameManager.ShowTypeMatchResult(typeMatch);
+            garbage.Action();
         }
 
         public void ShowDescription()
@@ -56,5 +76,7 @@ namespace Item.TrashRecycle
             if(!descriptor) return;
             descriptor.Hide();
         }
+        
+        public void Action() { }
     }
 }

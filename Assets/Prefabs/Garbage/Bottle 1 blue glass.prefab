@@ -280,10 +280,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51113a0bf2b4d6d8549422cf5a083ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item.Garbage.GarbageBase
-  itemName: Garbage
-  description: Default Desc
-  itemDescriptor: {fileID: 4049033260059130290}
-  data: {fileID: 0}
+  itemName: Bottle
+  description: Glass
+  itemDescriptor: {fileID: 2686099367207400295}
+  type: 3
   requiredToolType: 0
   scoreValue: 10
 --- !u!54 &3630583381764949788
@@ -503,14 +503,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8463214912271313290, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+      propertyPath: uiOffsetUp
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
---- !u!114 &4049033260059130290 stripped
+--- !u!114 &2686099367207400295 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7495289917814399839, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8463214912271313290, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
   m_PrefabInstance: {fileID: 5779684283945065197}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

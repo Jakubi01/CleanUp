@@ -110,8 +110,23 @@ namespace Input
             
             CurrentInteractable = itemBase;
             CurrentInteractable.IsHeld = true;
+            itemBase.SetHolder(this);
             _hasItem = true;
             _action.SetItem(itemBase);
+        }
+
+        internal void OnHeldItemDestroyed(ItemBase itemBase)
+        {
+            if (ReferenceEquals(_currentWatchingItem, itemBase))
+                _currentWatchingItem = null;
+            if (ReferenceEquals(_lastWatchingItem, itemBase))
+                _lastWatchingItem = null;
+
+            if (!ReferenceEquals(CurrentInteractable, itemBase)) return;
+
+            CurrentInteractable = null;
+            _hasItem = false;
+            _action?.ClearItem(itemBase);
         }
 
         private void TryDropItem()
@@ -138,9 +153,12 @@ namespace Input
 
             if (CurrentInteractable.TryGetComponent<Collider>(out var col)) col.enabled = true;
 
+            var droppedItem = CurrentInteractable;
             CurrentInteractable.IsHeld = false;
+            CurrentInteractable.SetHolder(null);
             CurrentInteractable = null;
             _hasItem = false;
+            _action?.ClearItem(droppedItem);
         }
     }
 }

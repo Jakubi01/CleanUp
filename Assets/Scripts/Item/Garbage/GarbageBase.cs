@@ -6,7 +6,7 @@ namespace Item.Garbage
 {
     public class GarbageBase : ItemBase
     {
-        public GarbageData data;               // 프리팹마다 에셋 하나 지정
+        public GarbageType type;
         public ToolType requiredToolType = ToolType.None;
         public int scoreValue = 10;
 
@@ -18,9 +18,13 @@ namespace Item.Garbage
 
         private void ActionCall()
         {
-            Debug.Log("GarbageBase::OnAction");
-
             GameManager.Instance.UnRegister(this);
+        }
+
+        public void CompleteRemove()
+        {
+            NotifyHolderItemDestroyed();
+            Destroy(gameObject);
         }
     }
 }

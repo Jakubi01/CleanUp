@@ -26,6 +26,8 @@ namespace Item
         
         public bool IsHeld { get; set; }
 
+        private XRPlayerInteract _holder;
+
         protected virtual void Awake()
         {
             if (itemDescriptor)
@@ -46,6 +48,25 @@ namespace Item
             
             _time += Time.deltaTime;
             _canAction = _time >= ActionTimeThreshold;
+        }
+
+        internal void SetHolder(XRPlayerInteract holder)
+        {
+            _holder = holder;
+        }
+
+        internal void NotifyHolderItemDestroyed()
+        {
+            if (!_holder) return;
+
+            var holder = _holder;
+            _holder = null;
+            holder.OnHeldItemDestroyed(this);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            NotifyHolderItemDestroyed();
         }
         
         public string GetDescription()

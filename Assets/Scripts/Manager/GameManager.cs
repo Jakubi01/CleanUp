@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UserInterface;
 
 namespace Assets.Scripts.Manager
 {
@@ -11,9 +12,15 @@ namespace Assets.Scripts.Manager
     {
         public enum GameOverType { CollectAllGarbage, LossAllScore }
 
+        [SerializeField] private TypeMatchResult typeMatchResult;
+        [SerializeField, Multiline] private string winMessage = "Thank you for your efforts.\n You collected all the trash.";
+        [SerializeField, Multiline] private string loseMessage = "Study recycling again.";
+        [SerializeField, Multiline] private string typeMatch = "Type Match!";
+        [SerializeField, Multiline] private string typeMismatch = "Oops! Wrong type";
+        
         public static GameManager Instance { get; private set; }
 
-        private List<GarbageBase> garbageCache;
+        private List<GarbageBase> garbageCache = new();
         private int _gameScore;
 
         private void Awake()
@@ -23,7 +30,7 @@ namespace Assets.Scripts.Manager
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
-            else if (Instance != this)
+            else
             {
                 Destroy(gameObject);
             }
@@ -35,6 +42,8 @@ namespace Assets.Scripts.Manager
 
             foreach(var g in list)
             {
+                if (!g) continue;
+                
                 if (garbageCache.Contains(g)) continue;
                 garbageCache.Add(g);
             }
@@ -42,10 +51,10 @@ namespace Assets.Scripts.Manager
 
         public void UnRegister(GarbageBase garbageBase)
         {
-            if (!garbageBase) return;
-            if (!garbageCache.Contains(garbageBase)) return;
+            if (!garbageBase || !garbageCache.Contains(garbageBase)) return;
 
             garbageCache.Remove(garbageBase);
+            garbageBase.CompleteRemove();
             ValidateList();
         }
 
@@ -63,8 +72,8 @@ namespace Assets.Scripts.Manager
         {
             var message = gameOverType switch
             {
-                GameOverType.CollectAllGarbage => "Thank you for your efforts.\n You collected all the trash.",
-                GameOverType.LossAllScore => "Study recycling again.",
+                GameOverType.CollectAllGarbage => winMessage,
+                GameOverType.LossAllScore => loseMessage,
                 _ => ""
             };
 
@@ -87,6 +96,14 @@ namespace Assets.Scripts.Manager
             {
                 GameOver(GameOverType.LossAllScore);
             }
+        }
+
+        public void ShowTypeMatchResult(bool typeMatch)
+        {
+            if (!typeMatchResult) return;
+
+            typeMatchResult.SetText(typeMatch ? this.typeMatch : typeMismatch, typeMatch);
+            typeMatchResult.ShowText();
         }
     }
 }

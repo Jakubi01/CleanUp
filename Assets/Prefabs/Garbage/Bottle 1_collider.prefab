@@ -92,9 +92,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51113a0bf2b4d6d8549422cf5a083ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item.Garbage.GarbageBase
-  itemName: Garbage
-  description: Default Desc
-  itemDescriptor: {fileID: 7495289917814399839, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+  itemName: Bottle
+  description: Glass
+  itemDescriptor: {fileID: 2353334157870821327}
   data: {fileID: 0}
   requiredToolType: 0
   scoreValue: 10
@@ -230,6 +230,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+--- !u!114 &2353334157870821327 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8463214912271313290, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+  m_PrefabInstance: {fileID: 6186778128578676293}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2428f797fa4b421a953c4a5bfef43eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UserInterface.ItemDescriptor
 --- !u!224 &4118905403446751504 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7850499046127433557, guid: 414806afb2786b849b144a3ab91ae470, type: 3}

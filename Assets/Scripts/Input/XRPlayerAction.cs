@@ -1,4 +1,5 @@
 ﻿using Interface;
+using Item.Garbage;
 using UnityEngine;
 
 namespace Input
@@ -22,17 +23,23 @@ namespace Input
         {
             if (!_input || _interactable == null) return;
 
+            if (_interactable is GarbageBase _) return;
+
             var pressed = _input.ConsumeAction();
             if (!pressed) return;
-
+            
             _interactable.Action();
         }
         
         public void SetItem(IInteractable interactable)
         {
-            if (interactable == null) return;
-            
             _interactable = interactable;
+        }
+
+        public void ClearItem(IInteractable interactable)
+        {
+            if (ReferenceEquals(_interactable, interactable))
+                _interactable = null;
         }
     }
 }

@@ -132,10 +132,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51113a0bf2b4d6d8549422cf5a083ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item.Garbage.GarbageBase
-  itemName: Garbage
-  description: Default Desc
-  itemDescriptor: {fileID: 7495289917814399839, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
-  data: {fileID: 0}
+  itemName: Paint Can
+  description: Metal
+  itemDescriptor: {fileID: 1032601221859727499}
+  type: 2
   requiredToolType: 0
   scoreValue: 10
 --- !u!54 &351583613471445573
@@ -270,11 +270,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8463214912271313290, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+      propertyPath: uiOffsetUp
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+--- !u!114 &1032601221859727499 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8463214912271313290, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
+  m_PrefabInstance: {fileID: 8874316988708368641}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2428f797fa4b421a953c4a5bfef43eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UserInterface.ItemDescriptor
 --- !u!224 &1717414079583929940 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7850499046127433557, guid: 414806afb2786b849b144a3ab91ae470, type: 3}
