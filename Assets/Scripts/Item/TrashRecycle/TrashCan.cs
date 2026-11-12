@@ -1,4 +1,5 @@
-﻿using Input;
+﻿using Assets.Scripts.Manager;
+using Input;
 using Interface;
 using Item.Garbage;
 using Item.InventorySystem;
@@ -38,7 +39,10 @@ namespace Item.TrashRecycle
 
         public void Action()
         {
-            
+            if (!_garbage) return;
+
+            _garbage.Action();
+            GameManager.Instance.AddGameScore(_garbage.scoreValue);
         }
 
         public void ShowDescription()

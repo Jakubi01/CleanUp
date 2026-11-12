@@ -1,4 +1,5 @@
-﻿using Item.Tools;
+﻿using Assets.Scripts.Manager;
+using Item.Tools;
 using UnityEngine;
 
 namespace Item.Garbage
@@ -12,7 +13,14 @@ namespace Item.Garbage
         protected override void Awake()
         {
             base.Awake();
-            OnAction += () => Debug.Log("GarbageBase::OnAction");
+            OnAction += ActionCall;
+        }
+
+        private void ActionCall()
+        {
+            Debug.Log("GarbageBase::OnAction");
+
+            GameManager.Instance.UnRegister(this);
         }
     }
 }

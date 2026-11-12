@@ -2,7 +2,7 @@
 
 namespace Item.Garbage
 {
-    public enum GarbageType { General, Plastic, PlasticBags, Can }
+    public enum GarbageType { General, Plastic, Metal, Glass, Can, Paper }
     
     [CreateAssetMenu(menuName = "Item/Garbage Data")]
     public class GarbageData : ScriptableObject
