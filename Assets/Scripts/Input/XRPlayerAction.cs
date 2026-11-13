@@ -21,7 +21,7 @@ namespace Input
 
         private void TryItemAction()
         {
-            if (!_input || _interactable == null) return;
+            if (_input is null || _interactable == null) return;
 
             if (_interactable is GarbageBase _) return;
 

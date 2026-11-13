@@ -30,12 +30,12 @@ namespace Item
 
         protected virtual void Awake()
         {
-            if (itemDescriptor)
+            if (itemDescriptor != null)
             {
                 itemDescriptor.Init(GetDescription());
             }
             
-            if (!itemDescriptor || itemDescriptor.transform.root != transform.root)
+            if (itemDescriptor == null|| itemDescriptor.transform.root != transform.root)
             {
                 itemDescriptor = GetComponentInChildren<ItemDescriptor>(true);
                 itemDescriptor.Init(GetDescription());
@@ -57,7 +57,7 @@ namespace Item
 
         internal void NotifyHolderItemDestroyed()
         {
-            if (!_holder) return;
+            if (_holder is null) return;
 
             var holder = _holder;
             _holder = null;
@@ -93,16 +93,12 @@ namespace Item
 
         public void ShowDescription()
         {
-            if (!itemDescriptor) return;
-            
-            itemDescriptor.Show();
+            itemDescriptor?.Show();
         }
 
         public void HideDescription()
         {
-            if (!itemDescriptor) return;
-            
-            itemDescriptor.Hide();
+            itemDescriptor?.Hide();
         }
     }
 }

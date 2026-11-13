@@ -72,11 +72,10 @@ namespace Input
         
         private void Bind(InputActionReference reference, System.Action<InputAction.CallbackContext> callback)
         {
-            if (!reference || reference.action == null)
+            if (reference == null || reference.action == null)
                 return;
 
-            InputAction action = reference.action;
-
+            var action = reference.action;
             action.performed += callback;
             action.canceled += callback;
             action.Enable();
@@ -84,7 +83,7 @@ namespace Input
 
         private void Unbind(InputActionReference reference, System.Action<InputAction.CallbackContext> callback)
         {
-            if (!reference || reference.action == null)
+            if (reference == null || reference.action == null)
                 return;
 
             InputAction action = reference.action;

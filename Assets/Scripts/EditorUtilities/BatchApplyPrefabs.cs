@@ -1,47 +1,50 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-public abstract class BatchApplyPrefabs
+namespace EditorUtilities
 {
-    [MenuItem("Tools/Prefabs/Apply Selected Prefab Overrides")]
-    public static void ApplySelectedPrefabs()
+    public abstract class BatchApplyPrefabs
     {
-        GameObject[] selected = Selection.gameObjects;
-        int count = 0;
-
-        foreach (GameObject go in selected)
+        [MenuItem("Tools/Prefabs/Apply Selected Prefab Overrides")]
+        public static void ApplySelectedPrefabs()
         {
-            if (PrefabUtility.IsPartOfPrefabInstance(go))
+            GameObject[] selected = Selection.gameObjects;
+            int count = 0;
+
+            foreach (GameObject go in selected)
             {
-                GameObject root = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
-                if (PrefabUtility.HasPrefabInstanceAnyOverrides(root, false))
+                if (PrefabUtility.IsPartOfPrefabInstance(go))
                 {
-                    PrefabUtility.ApplyPrefabInstance(root, InteractionMode.UserAction);
-                    count++;
+                    GameObject root = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
+                    if (PrefabUtility.HasPrefabInstanceAnyOverrides(root, false))
+                    {
+                        PrefabUtility.ApplyPrefabInstance(root, InteractionMode.UserAction);
+                        count++;
+                    }
                 }
             }
+            Debug.Log($"선택된 프리팹 중 {count}개의 오버라이드 적용 완료!");
         }
-        Debug.Log($"선택된 프리팹 중 {count}개의 오버라이드 적용 완료!");
-    }
 
-    [MenuItem("Tools/Prefabs/Apply ALL Prefab Overrides in Scene")]
-    public static void ApplyAllPrefabsInScene()
-    {
-        GameObject[] allObjects = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        int count = 0;
-
-        foreach (GameObject go in allObjects)
+        [MenuItem("Tools/Prefabs/Apply ALL Prefab Overrides in Scene")]
+        public static void ApplyAllPrefabsInScene()
         {
-            // 프리팹의 최상위 루트 오브젝트인지 확인
-            if (PrefabUtility.IsOutermostPrefabInstanceRoot(go))
+            GameObject[] allObjects = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            int count = 0;
+
+            foreach (GameObject go in allObjects)
             {
-                if (PrefabUtility.HasPrefabInstanceAnyOverrides(go, false))
+                // 프리팹의 최상위 루트 오브젝트인지 확인
+                if (PrefabUtility.IsOutermostPrefabInstanceRoot(go))
                 {
-                    PrefabUtility.ApplyPrefabInstance(go, InteractionMode.UserAction);
-                    count++;
+                    if (PrefabUtility.HasPrefabInstanceAnyOverrides(go, false))
+                    {
+                        PrefabUtility.ApplyPrefabInstance(go, InteractionMode.UserAction);
+                        count++;
+                    }
                 }
             }
+            Debug.Log($"씬 전체에서 수정된 프리팹 {count}개 일괄 적용 완료!");
         }
-        Debug.Log($"씬 전체에서 수정된 프리팹 {count}개 일괄 적용 완료!");
     }
 }

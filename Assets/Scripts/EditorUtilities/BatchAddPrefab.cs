@@ -20,7 +20,7 @@ namespace EditorUtilities
 
             if (GUILayout.Button("선택된 프리팹들에 모두 추가하기"))
             {
-                if (_childPrefab == null)
+                if (_childPrefab is null)
                 {
                     Debug.LogWarning("추가할 자식 프리팹을 먼저 지정해주세요.");
                     return;

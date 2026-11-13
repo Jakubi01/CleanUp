@@ -1,31 +1,27 @@
 ﻿using Item.Garbage;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UserInterface;
 
 namespace Assets.Scripts.Manager
 {
+    public enum GameOverType { CollectAllGarbage, LossAllScore }
+    
     public class GameManager : MonoBehaviour
     {
-        public enum GameOverType { CollectAllGarbage, LossAllScore }
 
+        [Header("UI")]
         [SerializeField] private TypeMatchResult typeMatchResult;
-        [SerializeField, Multiline] private string winMessage = "Thank you for your efforts.\n You collected all the trash.";
-        [SerializeField, Multiline] private string loseMessage = "Study recycling again.";
-        [SerializeField, Multiline] private string typeMatch = "Type Match!";
-        [SerializeField, Multiline] private string typeMismatch = "Oops! Wrong type";
+        [SerializeField] private GameOver gameOver;
         
         public static GameManager Instance { get; private set; }
 
-        private List<GarbageBase> garbageCache = new();
+        private readonly List<GarbageBase> _garbageCache = new();
         private int _gameScore;
 
         private void Awake()
         {
-            if (!Instance)
+            if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -42,42 +38,29 @@ namespace Assets.Scripts.Manager
 
             foreach(var g in list)
             {
-                if (!g) continue;
+                if (g == null) continue;
                 
-                if (garbageCache.Contains(g)) continue;
-                garbageCache.Add(g);
+                if (_garbageCache.Contains(g)) continue;
+                _garbageCache.Add(g);
             }
         }
 
         public void UnRegister(GarbageBase garbageBase)
         {
-            if (!garbageBase || !garbageCache.Contains(garbageBase)) return;
+            if (garbageBase is null|| !_garbageCache.Contains(garbageBase)) return;
 
-            garbageCache.Remove(garbageBase);
+            _garbageCache.Remove(garbageBase);
             garbageBase.CompleteRemove();
             ValidateList();
         }
 
-        public void ValidateList()
+        private void ValidateList()
         {
-            if (garbageCache == null) return;
-
-            if(garbageCache.Count <= 0)
-            {
-                GameOver(GameOverType.CollectAllGarbage);
-            }
-        }
-
-        public string GameOver(GameOverType gameOverType)
-        {
-            var message = gameOverType switch
-            {
-                GameOverType.CollectAllGarbage => winMessage,
-                GameOverType.LossAllScore => loseMessage,
-                _ => ""
-            };
-
-            return message;
+            if (_garbageCache == null || gameOver is null) return;
+            if (_garbageCache.Count > 0) return;
+            
+            gameOver.SetText(GameOverType.CollectAllGarbage);
+            gameOver.Show();
         }
 
         public void AddGameScore(int scoreValue)
@@ -89,20 +72,20 @@ namespace Assets.Scripts.Manager
 
         public void RemoveGameScore(int scoreValue)
         {
-            if(scoreValue <= 0) return;
+            if(scoreValue <= 0 || gameOver is null) return;
 
             _gameScore -= scoreValue;
-            if(_gameScore < 0)
-            {
-                GameOver(GameOverType.LossAllScore);
-            }
+            if (_gameScore >= 0) return;
+            
+            gameOver.SetText(GameOverType.LossAllScore);
+            gameOver.Show();
         }
 
-        public void ShowTypeMatchResult(bool typeMatch)
+        public void ShowTypeMatchResult(bool isTypeMatch)
         {
-            if (!typeMatchResult) return;
+            if (typeMatchResult is null) return;
 
-            typeMatchResult.SetText(typeMatch ? this.typeMatch : typeMismatch, typeMatch);
+            typeMatchResult.SetText(isTypeMatch);
             typeMatchResult.ShowText();
         }
     }

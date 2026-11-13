@@ -21,10 +21,10 @@ namespace Input
 
         private void Awake()
         {
-            if (!playerInput)
+            if (playerInput == null)
                 playerInput = GetComponent<XRPlayerInput>();
 
-            if (!hmd && Camera.main)
+            if (hmd == null && Camera.main != null)
                 hmd = Camera.main.transform;
 
             if (hmd)
@@ -36,7 +36,7 @@ namespace Input
 
         private void Update()
         {
-            if (!playerInput || !hmd || !_initialized)
+            if (playerInput is null || hmd is null || !_initialized)
                 return;
 
             // XR 기기가 활성화되어 있으면 HMD 추적을 그대로 사용한다.

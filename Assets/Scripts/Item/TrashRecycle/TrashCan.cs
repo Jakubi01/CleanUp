@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Manager;
+﻿using System.Globalization;
+using Assets.Scripts.Manager;
 using Input;
 using Interface;
 using Item.Garbage;
@@ -19,12 +20,12 @@ namespace Item.TrashRecycle
 
         private void Awake()
         {
-            if (descriptor)
+            if (descriptor != null)
             {
                 descriptor.Init(GetDescription());
             }
 
-            if (GameManager.Instance)
+            if (GameManager.Instance != null)
             {
                 _gameManager = GameManager.Instance;
             }
@@ -32,12 +33,12 @@ namespace Item.TrashRecycle
         
         public string GetDescription()
         {
-            return trashCanName.ToUpper();
+            return trashCanName.ToUpper(CultureInfo.InvariantCulture);
         }
 
         public void Interact(XRPlayerInteract player)
         {
-            if (!player || !player.CurrentInteractable ||
+            if (player?.CurrentInteractable is null ||
                 !player.CurrentInteractable.TryGetComponent(out GarbageBase garbage)) return;
             
             CompareType(garbage);
@@ -45,12 +46,11 @@ namespace Item.TrashRecycle
 
         private void CompareType(GarbageBase garbage)
         {
-            if (!garbage) return;
+            if (garbage is null) return;
 
             var typeMatch = garbageType == garbage.type;
 
-            if (!_gameManager)
-                _gameManager = GameManager.Instance;
+            _gameManager ??= GameManager.Instance;
             
             if (typeMatch)
             {
@@ -67,14 +67,12 @@ namespace Item.TrashRecycle
 
         public void ShowDescription()
         {
-            if (!descriptor) return;
-            descriptor.Show();
+            descriptor?.Show();
         }
 
         public void HideDescription()
         {
-            if(!descriptor) return;
-            descriptor.Hide();
+            descriptor?.Hide();
         }
         
         public void Action() { }

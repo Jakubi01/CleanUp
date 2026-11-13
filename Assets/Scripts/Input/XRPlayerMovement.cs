@@ -43,21 +43,21 @@ namespace Input
         {
             _characterController = GetComponent<CharacterController>();
 
-            if (!playerInput)
+            if (playerInput == null)
                 playerInput = GetComponent<XRPlayerInput>();
 
-            if (!hmd && Camera.main)
+            if (hmd == null && Camera.main != null)
                 hmd = Camera.main.transform;
 
             _currentHeightTarget = standingHeight;
 
-            if (cameraRig)
+            if (cameraRig != null)
                 _cameraRigInitialLocalPosition = cameraRig.localPosition;
         }
 
         private void Update()
         {
-            if (!hmd || !playerInput)
+            if (hmd is null || playerInput is null)
                 return;
 
             HandleCrouch();
@@ -121,7 +121,7 @@ namespace Input
             _characterController.height = Mathf.Lerp(_characterController.height, _currentHeightTarget, Time.deltaTime * timeToCrouch);
             _characterController.center = new Vector3(0f, _characterController.height / 2f, 0f);
 
-            if (!cameraRig) return;
+            if (cameraRig is null) return;
             var targetOffset = shouldCrouch ? (crouchHeight - standingHeight) * 0.5f : 0f;
             _virtualCrouchYOffset = Mathf.Lerp(_virtualCrouchYOffset, targetOffset, Time.deltaTime * timeToCrouch);
 

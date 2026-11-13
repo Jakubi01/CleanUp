@@ -15,15 +15,14 @@ namespace UserInterface
         
         public void Init(string description)
         {
-            if (descriptionText != null)
-            {
-                descriptionText.text = description;
-            }
+            if (descriptionText == null || string.IsNullOrEmpty(description)) return;
+            
+            descriptionText.text = description;
         }
         
         private void Start()
         {
-            if (Camera.main)
+            if (Camera.main != null)
             {
                 _mainCameraTransform = Camera.main.transform;
             }
@@ -31,7 +30,7 @@ namespace UserInterface
             _parentItemTransform = transform.parent;
             
             _canvasGroup = GetComponent<CanvasGroup>();
-            if (!_canvasGroup)
+            if (_canvasGroup != null)
             {
                 _canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
@@ -56,7 +55,7 @@ namespace UserInterface
 
         private void CanvasGroupVisibleControl(bool value)
         {
-            if (!_canvasGroup) return;
+            if (_canvasGroup is null) return;
 
             _uiVisible = value;
             _canvasGroup.alpha = value ? 1f : 0f;
@@ -68,14 +67,14 @@ namespace UserInterface
         {
             if (!_uiVisible) return;
             
-            if (!_canvasGroup || !(_canvasGroup.alpha > 0)) return;
+            if (_canvasGroup is null || !(_canvasGroup.alpha > 0)) return;
             
-            if (_parentItemTransform)
+            if (_parentItemTransform is not null)
             {
                 transform.position = _parentItemTransform.position + Vector3.up * uiOffsetUp;
             }
 
-            if (_mainCameraTransform)
+            if (_mainCameraTransform is not null)
             {
                 transform.rotation = Quaternion.LookRotation(_mainCameraTransform.forward, _mainCameraTransform.up);
             }

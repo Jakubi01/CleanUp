@@ -40,7 +40,7 @@ namespace Input
 
         private void FocusInteractable()
         {
-            if (!eyeTransform) return;
+            if (eyeTransform is null) return;
     
             if (!Physics.Raycast(eyeTransform.position, eyeTransform.forward, out var hit, 5f, itemLayerMask))
             {
@@ -67,7 +67,7 @@ namespace Input
 
         private void TryInteract()
         {
-            if (!_input || _currentWatchingItem == null) return;
+            if (_input is null || _currentWatchingItem == null) return;
     
             var interactPressed = _input.ConsumeInteract();
             if (!interactPressed) return;
@@ -93,13 +93,13 @@ namespace Input
 
         public bool CanCollect(ItemBase itemBase)
         {
-            if(!itemBase) return false;
+            if(itemBase is null) return false;
             return !_hasItem;
         }
 
         public void CollectItem(ItemBase itemBase)
         {
-            if (_hasItem || !itemBase) return;
+            if (_hasItem || itemBase is null) return;
             
             itemBase.gameObject.transform.SetParent(rightHandSocket);
             itemBase.gameObject.transform.localPosition = Vector3.zero;
@@ -131,7 +131,7 @@ namespace Input
 
         private void TryDropItem()
         {
-            if (!_input) return;
+            if (_input is null) return;
 
             var pressed = _input.ConsumeDrop();
             if (!pressed) return;
@@ -141,7 +141,7 @@ namespace Input
         
         private void DropItem()
         {
-            if (!_hasItem || !CurrentInteractable) return;
+            if (!_hasItem || CurrentInteractable is null) return;
             
             CurrentInteractable.gameObject.transform.SetParent(null);
 

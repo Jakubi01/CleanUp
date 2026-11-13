@@ -9,6 +9,10 @@ namespace UserInterface
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMP_Text typeMatchResultText;
         
+        [Header("Message")]
+        [SerializeField, Multiline] private string typeMatch = "Type Match!";
+        [SerializeField, Multiline] private string typeMismatch = "Oops! Wrong type";
+        
         private const float FadeDuration = 1f;
         private const float HoldDuration = 1f;
         
@@ -19,11 +23,10 @@ namespace UserInterface
             canvasGroup.alpha = 0f;
         }
         
-        public void SetText(string message, bool result)
+        public void SetText(bool isMatch)
         {
-            if (string.IsNullOrEmpty(message)) return;
-            typeMatchResultText.color = result ? Color.green : Color.red;
-            typeMatchResultText.text = message;
+            typeMatchResultText.color = isMatch ? Color.green : Color.red;
+            typeMatchResultText.text = isMatch ? typeMatch : typeMismatch;
         }
 
         public void ShowText()

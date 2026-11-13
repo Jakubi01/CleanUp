@@ -12,12 +12,12 @@ namespace Assets.Scripts.Item
 
         private void Awake()
         {
-            if (!target) target = FindFirstObjectByType<XRPlayerMovement>().gameObject;
+            if (target == null) target = FindFirstObjectByType<XRPlayerMovement>().gameObject;
         }
 
         private void Update()
         {
-            if(!target) return;
+            if(target is null) return;
 
             transform.rotation = Quaternion.LookRotation(target.transform.forward, target.transform.up);
         }
