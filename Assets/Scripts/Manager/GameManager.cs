@@ -1,18 +1,18 @@
-﻿using Item.Garbage;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Item.Garbage;
 using UnityEngine;
 using UserInterface;
 
-namespace Assets.Scripts.Manager
+namespace Manager
 {
     public enum GameOverType { CollectAllGarbage, LossAllScore }
     
     public class GameManager : MonoBehaviour
     {
-
         [Header("UI")]
         [SerializeField] private TypeMatchResult typeMatchResult;
         [SerializeField] private GameOver gameOver;
+        [SerializeField] private GameHUD gameHUD;
         
         public static GameManager Instance { get; private set; }
 
@@ -59,25 +59,29 @@ namespace Assets.Scripts.Manager
             if (_garbageCache == null || gameOver is null) return;
             if (_garbageCache.Count > 0) return;
             
-            gameOver.SetText(GameOverType.CollectAllGarbage);
+            gameOver.SetResultText(GameOverType.CollectAllGarbage);
             gameOver.Show();
         }
 
         public void AddGameScore(int scoreValue)
         {
-            if (scoreValue <= 0) return;
+            if (scoreValue <= 0 || gameHUD is null) return;
 
             _gameScore += scoreValue;
+            gameHUD.UpdateScoreText(_gameScore);
         }
 
         public void RemoveGameScore(int scoreValue)
         {
-            if(scoreValue <= 0 || gameOver is null) return;
+            if(scoreValue <= 0 || gameHUD is null) return;
 
             _gameScore -= scoreValue;
-            if (_gameScore >= 0) return;
+            gameHUD.UpdateScoreText(_gameScore);
             
-            gameOver.SetText(GameOverType.LossAllScore);
+            if (_gameScore >= 0 || gameOver is null) return;
+            
+            gameOver.SetResultText(GameOverType.LossAllScore);
+            gameOver.SetScoreText(_gameScore);
             gameOver.Show();
         }
 

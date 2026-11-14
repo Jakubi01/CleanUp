@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
-using Assets.Scripts.Manager;
 using Input;
 using Interface;
 using Item.Garbage;
 using Item.InventorySystem;
+using Manager;
 using UnityEngine;
 using UserInterface;
 

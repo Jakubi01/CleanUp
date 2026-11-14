@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Manager;
-using Item.Tools;
+﻿using Item.Tools;
+using Manager;
 using UnityEngine;
 
 namespace Item.Garbage

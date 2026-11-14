@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.Manager;
 using Item.Garbage;
+using Manager;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;

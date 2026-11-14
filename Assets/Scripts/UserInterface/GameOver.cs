@@ -1,5 +1,5 @@
 ﻿using System;
-using Assets.Scripts.Manager;
+using Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +12,7 @@ namespace UserInterface
         [Header("Setting")]
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TMP_Text resultText;
+        [SerializeField] private TMP_Text scoreText;
         [SerializeField] private Button reTryButton;
         [SerializeField] private Button quitButton;
         
@@ -33,16 +34,21 @@ namespace UserInterface
             quitButton.onClick.RemoveAllListeners();
         }
 
-        public void SetText(GameOverType gameOverType)
+        public void SetResultText(GameOverType gameOverType)
         {
-            var message = gameOverType switch
+            resultText.text = gameOverType switch
             {
                 GameOverType.CollectAllGarbage => winMessage,
                 GameOverType.LossAllScore => loseMessage,
                 _ => "None"
             };
             
-            resultText.text = message;
+            resultText.color = gameOverType == GameOverType.CollectAllGarbage ? Color.green : Color.red;
+        }
+
+        public void SetScoreText(int score)
+        {
+            scoreText.text = "Score\t" + score;
         }
 
         public void Show()
