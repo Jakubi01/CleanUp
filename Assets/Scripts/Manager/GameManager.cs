@@ -77,7 +77,7 @@ namespace Manager
 
             _gameScore -= scoreValue;
             gameHUD.UpdateScoreText(_gameScore);
-            
+
             if (_gameScore >= 0 || gameOver is null) return;
             
             gameOver.SetResultText(GameOverType.LossAllScore);
@@ -91,6 +91,12 @@ namespace Manager
 
             typeMatchResult.SetText(isTypeMatch);
             typeMatchResult.ShowText();
+        }
+
+        public void ClearFlags()
+        {
+            _gameScore = 0;
+            _garbageCache.Clear();
         }
     }
 }

@@ -60,6 +60,7 @@ namespace UserInterface
 
         private void OnRetryButtonClicked()
         {
+            GameManager.Instance.ClearFlags();
             SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
 
