@@ -1,6 +1,7 @@
 ﻿using System;
 using Manager;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,10 +17,14 @@ namespace UserInterface
         [SerializeField] private Button reTryButton;
         [SerializeField] private Button quitButton;
         
-        [Header("Message")]
-        [SerializeField, Multiline] private string winMessage = "Thank you for your efforts.\n You collected all the trash.";
-        [SerializeField, Multiline] private string loseMessage = "Study recycling again.";
+        [Header("Score-based Messages (Game Clear)")]
+        [SerializeField, Multiline] private string highTierMessage = "Excellent!\nnYou're a true recycling master!";
+        [SerializeField, Multiline] private string midTierMessage = "Good job!\nYou've helped make the environment cleaner.";
+        [SerializeField, Multiline] private string lowTierMessage = "All trash collected, but...\nTry aiming for a higher score next time!";
 
+        [SerializeField] private int highTierScore = 100;
+        [SerializeField] private int midTierScore = 50;
+        
         private void Awake()
         {
             canvasGroup.alpha = 0;
@@ -34,21 +39,25 @@ namespace UserInterface
             quitButton.onClick.RemoveAllListeners();
         }
 
-        public void SetResultText(GameOverType gameOverType)
+        public void SetResultText(int finalScore)
         {
-            resultText.text = gameOverType switch
+            if (finalScore >= highTierScore)
             {
-                GameOverType.CollectAllGarbage => winMessage,
-                GameOverType.LossAllScore => loseMessage,
-                _ => "None"
-            };
+                resultText.text = highTierMessage;
+                resultText.color = Color.green;
+            }
+            else if (finalScore >= midTierScore)
+            {
+                resultText.text = midTierMessage;
+                resultText.color = Color.darkGoldenRod;
+            }
+            else
+            {
+                resultText.text = lowTierMessage;
+                resultText.color = Color.softRed;
+            }
             
-            resultText.color = gameOverType == GameOverType.CollectAllGarbage ? Color.green : Color.red;
-        }
-
-        public void SetScoreText(int score)
-        {
-            scoreText.text = "Score\t" + score;
+            scoreText.text = "Score\t" + finalScore;
         }
 
         public void Show()

@@ -5,8 +5,6 @@ using UserInterface;
 
 namespace Manager
 {
-    public enum GameOverType { CollectAllGarbage, LossAllScore }
-    
     public class GameManager : MonoBehaviour
     {
         [Header("UI")]
@@ -59,7 +57,7 @@ namespace Manager
             if (_garbageCache == null || gameOver is null) return;
             if (_garbageCache.Count > 0) return;
             
-            gameOver.SetResultText(GameOverType.CollectAllGarbage);
+            gameOver.SetResultText(_gameScore);
             gameOver.Show();
         }
 
@@ -77,12 +75,6 @@ namespace Manager
 
             _gameScore -= scoreValue;
             gameHUD.UpdateScoreText(_gameScore);
-
-            if (_gameScore >= 0 || gameOver is null) return;
-            
-            gameOver.SetResultText(GameOverType.LossAllScore);
-            gameOver.SetScoreText(_gameScore);
-            gameOver.Show();
         }
 
         public void ShowTypeMatchResult(bool isTypeMatch)
