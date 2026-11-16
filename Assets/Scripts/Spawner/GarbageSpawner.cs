@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Item.Garbage;
 using Manager;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,7 +15,7 @@ namespace Spawner
         [SerializeField] private float maxHeight;
         [SerializeField] private float rayStartHeight;
 
-        private List<GarbageBase> _spawnedGarbageCache = new();
+        private readonly List<GarbageBase> _spawnedGarbageCache = new();
         private const float SpawnPositionAdjustValue = 0.5f;
 
         private void Start()
@@ -49,7 +47,7 @@ namespace Spawner
                     && hit.point.y <= maxHeight)
                 {
                     var upPosition = new Vector3(hit.point.x, hit.point.y + SpawnPositionAdjustValue, hit.point.z);
-                    var spawned = Instantiate(t, hit.point, Quaternion.identity);
+                    var spawned = Instantiate(t, upPosition, Quaternion.identity);
                     spawned.transform.SetParent(transform);
                     spawned.transform.localScale = Vector3.one * 2f;
                     _spawnedGarbageCache.Add(spawned);
@@ -59,6 +57,7 @@ namespace Spawner
             GameManager.Instance.Register(_spawnedGarbageCache);
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
@@ -69,5 +68,6 @@ namespace Spawner
             var startPos = transform.position + Vector3.up * rayStartHeight;
             Gizmos.DrawRay(startPos, Vector3.down * (rayStartHeight + 2f));
         }
+#endif
     }
 }

@@ -15,6 +15,7 @@ namespace Manager
         public static GameManager Instance { get; private set; }
 
         private readonly List<GarbageBase> _garbageCache = new();
+        private int _cacheElemCount;
         private int _gameScore;
 
         private void Awake()
@@ -36,11 +37,11 @@ namespace Manager
 
             foreach(var g in list)
             {
-                if (g == null) continue;
-                
-                if (_garbageCache.Contains(g)) continue;
+                if (g == null || _garbageCache.Contains(g)) continue;
                 _garbageCache.Add(g);
             }
+            
+            _cacheElemCount = _garbageCache.Count;
         }
 
         public void UnRegister(GarbageBase garbageBase)
@@ -54,10 +55,11 @@ namespace Manager
 
         private void ValidateList()
         {
-            if (_garbageCache == null || gameOver is null) return;
-            if (_garbageCache.Count > 0) return;
-            
-            gameOver.SetResultText(_gameScore);
+            if (_garbageCache == null || _garbageCache.Count > 0) return;
+            if (gameOver is null || gameHUD is null) return;
+
+            gameHUD.Hide();
+            gameOver.SetResultText(_gameScore, _cacheElemCount);
             gameOver.Show();
         }
 

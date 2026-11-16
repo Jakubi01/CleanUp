@@ -1,7 +1,5 @@
-﻿using System;
-using Manager;
+﻿using Manager;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,9 +19,6 @@ namespace UserInterface
         [SerializeField, Multiline] private string highTierMessage = "Excellent!\nnYou're a true recycling master!";
         [SerializeField, Multiline] private string midTierMessage = "Good job!\nYou've helped make the environment cleaner.";
         [SerializeField, Multiline] private string lowTierMessage = "All trash collected, but...\nTry aiming for a higher score next time!";
-
-        [SerializeField] private int highTierScore = 100;
-        [SerializeField] private int midTierScore = 50;
         
         private void Awake()
         {
@@ -39,14 +34,16 @@ namespace UserInterface
             quitButton.onClick.RemoveAllListeners();
         }
 
-        public void SetResultText(int finalScore)
+        public void SetResultText(int finalScore, int totalElements)
         {
-            if (finalScore >= highTierScore)
+            var sectionSize  = totalElements / 3;
+            
+            if (finalScore >= sectionSize * 2)
             {
                 resultText.text = highTierMessage;
                 resultText.color = Color.green;
             }
-            else if (finalScore >= midTierScore)
+            else if (finalScore >= sectionSize)
             {
                 resultText.text = midTierMessage;
                 resultText.color = Color.darkGoldenRod;
