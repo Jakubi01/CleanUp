@@ -1,6 +1,8 @@
-﻿using Interface;
+﻿using System;
+using Interface;
 using Item;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Input
 {
@@ -14,9 +16,13 @@ namespace Input
         [SerializeField] private Transform rightHandSocket;
         [SerializeField] private Transform eyeTransform;
         [SerializeField] private LayerMask itemLayerMask;
+        [SerializeField] private string rightHandControllerName;
+        [SerializeField] private string rightHandName;
 
         private XRPlayerInput _input;
         private XRPlayerAction _action;
+        
+        private Transform _rightHandControllerTransform;
         
         private IInteractable  _currentWatchingItem;
         private IInteractable  _lastWatchingItem;
@@ -30,9 +36,15 @@ namespace Input
             _input = GetComponent<XRPlayerInput>();
             _action = GetComponent<XRPlayerAction>();
         }
+
+        private void Start()
+        {
+            CheckRightHandTransform();
+        }
         
         private void Update()
         {
+            CheckRightHandTransform();
             FocusInteractable();
             TryInteract();
             TryDropItem();
@@ -159,6 +171,31 @@ namespace Input
             CurrentInteractable = null;
             _hasItem = false;
             _action?.ClearItem(droppedItem);
+        }
+
+        private void CheckRightHandTransform()
+        {
+            if (_rightHandControllerTransform is null)
+            {
+                FindRightHandAutomatically();
+            }
+
+            if (_rightHandControllerTransform is not null && rightHandSocket is not null)
+            {
+                rightHandSocket.position = _rightHandControllerTransform.position;
+                rightHandSocket.rotation = _rightHandControllerTransform.rotation;
+            }
+        }
+        
+        private void FindRightHandAutomatically()
+        {
+            if (_rightHandControllerTransform is not null) return;
+            
+            var found = GameObject.Find(rightHandControllerName) ?? GameObject.Find(rightHandName);
+            if (found is not null)
+            {
+                _rightHandControllerTransform = found.transform;
+            }
         }
     }
 }
