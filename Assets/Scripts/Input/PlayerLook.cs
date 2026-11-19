@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Manager;
+using UnityEngine;
 using UnityEngine.XR;
 
 namespace Input
@@ -36,7 +37,7 @@ namespace Input
 
         private void Update()
         {
-            if (playerInput is null || hmd is null || !_initialized)
+            if (!GameManager.Instance.gameStart || playerInput is null || hmd is null || !_initialized)
                 return;
 
             // XR 기기가 활성화되어 있으면 HMD 추적을 그대로 사용한다.

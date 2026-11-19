@@ -11,7 +11,9 @@ namespace Manager
         [SerializeField] private TypeMatchResult typeMatchResult;
         [SerializeField] private GameOver gameOver;
         [SerializeField] private GameHUD gameHUD;
-        
+
+        public bool gameStart;
+
         public static GameManager Instance { get; private set; }
 
         private readonly List<GarbageBase> _garbageCache = new();
@@ -58,7 +60,7 @@ namespace Manager
             if (_garbageCache == null || _garbageCache.Count > 0) return;
             if (gameOver is null || gameHUD is null) return;
 
-            gameHUD.Hide();
+            gameHUD.SetGameHUDVisibility(false);
             gameOver.SetResultText(_gameScore, _cacheElemCount);
             gameOver.Show();
         }
@@ -91,6 +93,7 @@ namespace Manager
         {
             _gameScore = 0;
             _garbageCache.Clear();
+            gameStart = false;
         }
     }
 }

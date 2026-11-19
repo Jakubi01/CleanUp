@@ -2,8 +2,9 @@
 using Oculus.Interaction.Locomotion;
 using CharacterController = Oculus.Interaction.Locomotion.CharacterController;
 #else
-using CharacterController = UnityEngine.CharacterController;
+using Manager;
 using UnityEngine;
+using CharacterController = UnityEngine.CharacterController;
 #endif
 
 namespace Input
@@ -57,7 +58,7 @@ namespace Input
 
         private void Update()
         {
-            if (hmd is null || playerInput is null)
+            if (!GameManager.Instance.gameStart || hmd is null || playerInput is null)
                 return;
 
             HandleCrouch();

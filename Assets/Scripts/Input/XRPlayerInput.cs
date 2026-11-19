@@ -62,13 +62,6 @@ namespace Input
             _jumpPressed = false;
             _actionPressed = false;
         }
-
-        private void Start()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            CursorControl(CursorLockMode.Locked, false);
-        }
         
         private void Bind(InputActionReference reference, System.Action<InputAction.CallbackContext> callback)
         {
@@ -182,7 +175,7 @@ namespace Input
                 LookInput = Vector2.zero;
         }
         
-        public void CursorControl(CursorLockMode cursorLockMode, bool visible)
+        internal static void CursorControl(CursorLockMode cursorLockMode, bool visible)
         {
             Cursor.lockState = cursorLockMode;
             Cursor.visible = visible;
